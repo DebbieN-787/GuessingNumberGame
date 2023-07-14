@@ -1,14 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-    </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="bin" level="application" />
-    <orderEntry type="library" name="bin" level="project" />
-    <orderEntry type="library" name="bin1" level="project" />
-  </component>
-</module>
+import java.util.Random;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Random rand = new Random();
+        int numberToGuess = rand.nextInt(100); // this will generate a random number between 0-99
+        int numberOfTries = 0;
+        Scanner input = new Scanner(System.in);
+        int guess;
+        boolean win = false;
+        int score = 100;
+
+        System.out.println("Choose difficulty level: (1) Normal (2) Hard");
+        int difficulty = input.nextInt();
+        int maxTries = difficulty == 2 ? 5 : Integer.MAX_VALUE;  // Limit number of tries to 5 in hard mode
+
+        while (!win && numberOfTries < maxTries) {
+
+            System.out.println("Guess a number between 0 and 99:");
+            guess = input.nextInt();
+            numberOfTries++;
+
+            if (guess == numberToGuess) {
+                win = true;
+            }
+            else if (guess < numberToGuess) {
+                System.out.println("Your guess is too low");
+            }
+            else if (guess > numberToGuess) {
+                System.out.println("Your guess is too high");
+            }
+
+            if (numberOfTries % 3 == 0 && !win) {  // After every third incorrect guess, provide a hint
+                if (numberToGuess % 2 == 0) {
+                    System.out.println("Hint: The number is even");
+                } else {
+                    System.out.println("Hint: The number is odd");
+                }
+            }
+
+            score -= 10;
+            if (score < 0) {
+                score = 0;
+            }
+        }
+
+        if(win) {
+            System.out.println("You win!");
+            System.out.println("The number was " + numberToGuess);
+            System.out.println("It took you " + numberOfTries + " tries");
+            System.out.println("Your score is: " + score);
+        } else {
+            System.out.println("You lose! The correct number was " + numberToGuess);
+        }
+    }
+}
